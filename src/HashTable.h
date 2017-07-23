@@ -792,3 +792,235 @@ public:
  * Instantiate a new type - lock which does nothing
  */
 typedef Lock<SynchroObjectDummy> LockDummy;
+
+
+/**
+ * GCC atomic builtins
+ */
+#define hashtable_likely(x)      __builtin_expect(!!(x), 1)   // !!(x) will return 1 for any x != 0
+#define hashtable_unlikely(x)    __builtin_expect(!!(x), 0)
+#define hashtable_cmpxchg(key, val, new_val) __sync_val_compare_and_swap(key, val, new_val)
+#define hashtable_barrier() __sync_synchronize()
+
+/**
+ * Saves some typing
+ */
+#define hashtable_sync_access(x) (*(volatile __typeof__(*x) *) (x))
+
+/**
+ * Implementation of lockfree linear probing hashtable
+ * The hashtable targets scenarios where a typical key is 32 or 64 bits variable
+ * The number of probes is limited by a constant. The index is not wrapping around,
+ * but instead the hashtable allocates enough memory to handle linear probing in the end
+ * of the table
+ *
+ * Limitation: a specific entry (a specific key) can be inserted and deleted by one thread.
+ *
+ * Performance: a core can make above 30M add&remove operations per second, cost of a
+ * single operation is under 20 nanos which is an equivalent of 50-100 opcodes.
+ */
+#define LocklessHashTableTemplateTypes typename Object, Object IllegalData, typename Key, Key IllegalKey, typename Allocator, typename Hash
+#define LocklessHashTableTemplateArgs Object, IllegalData, Key, IllegalKey, Allocator, Hash
+
+template<LocklessHashTableTemplateTypes>
+class LocklessHashTable: public HashTableBase
+{
+public:
+    enum InsertResult
+    {
+        INSERT_DONE,
+        INSERT_COLLISION,
+        INSERT_DUPLICATE,
+        INSERT_FAILED
+    };
+
+    static LocklessHashTable* create(const char *name, int sizeBits)
+    {
+        size_t sizeEntries = (1 << sizeBits);
+        size_t sizeBytes = memorySize(sizeBits);
+        TableEntry* table = (TableEntry*)Allocator::alloc(sizeBytes);
+        if (!table)
+        {
+        	return nullptr;
+        }
+        for (size_t i = 0;i < sizeEntries+MAX_COLLISIONS;i++)
+        {
+            initSlot(&table[i]);
+        }
+
+        void *locklessHashTableMemory = Allocator::alloc(sizeof(LocklessHashTable));
+        if (locklessHashTableMemory == nullptr)
+        {
+            Allocator::free((void *)table);
+            return nullptr;
+        }
+        LocklessHashTable *locklessHashTable = new (locklessHashTableMemory) LocklessHashTable(name, sizeBits, table);
+        return locklessHashTable;
+    }
+
+    /**
+     * Because the hash table is created using a placement operator new[]
+     * I need function destroy which takes care of the cleanup
+     */
+    static void destroy(LocklessHashTable *hashTable)
+    {
+        hashTable->~LocklessHashTable();
+        Allocator::free(hashTable->table);
+        Allocator::free((void *)hashTable);
+    }
+
+    ~LocklessHashTable()
+    {
+    }
+
+    InsertResult insert(Key key, const Object &o);
+    bool remove(Key key, Object *o);
+    bool search(Key key, Object *o);
+
+protected:
+
+    static const int MAX_COLLISIONS = 3;
+
+    typedef struct
+    {
+        volatile Key key;
+        Object data;
+    } TableEntry;
+
+    static void initSlot(TableEntry *entry)
+    {
+    	entry->key = IllegalKey;
+    	entry->data = IllegalData;
+    }
+
+    static size_t memorySize(const int bits)
+    {
+        size_t entries = (1 << bits) + MAX_COLLISIONS;
+        return (sizeof(TableEntry) * entries);
+    }
+
+    LocklessHashTable(const char *name, int sizeBits, TableEntry* table) : HashTableBase(name)
+	{
+        sizeEntries = (1 << sizeBits);
+        sizeBytes = memorySize(sizeBits);
+        this->table = table;
+        size = sizeEntries + MAX_COLLISIONS;
+	}
+
+    inline size_t getIndex( const uint32_t hash)
+    {
+        return hash & (sizeEntries - 1);
+    }
+
+    size_t sizeEntries;
+    size_t sizeBytes;
+    TableEntry *table;
+};
+
+
+/**
+ * Hash the key, get an index in the hashtable, try compare-and-set.
+ * If fails (not likely) try again with the next slot (linear probing)
+ * continue until success or max_tries is hit
+ */
+template<LocklessHashTableTemplateTypes>
+enum LocklessHashTable<LocklessHashTableTemplateArgs>::InsertResult
+LocklessHashTable<LocklessHashTableTemplateArgs>::insert(Key key, const Object &o)
+{
+    const uint_fast32_t hash = Hash::hash(key);
+	const uint_fast32_t index = getIndex(hash);
+	/* I can do this for the last slot too - I allocated max_tries more slots */
+	const uint_fast32_t indexMax = index+MAX_COLLISIONS;
+    statistics.insertTotal++;
+	for (TableEntry *entry = &table[index];entry < &table[indexMax];entry++)
+	{
+	    Key oldKey = hashtable_cmpxchg(&entry->key, IllegalKey, key);
+	    if (hashtable_likely(oldKey == IllegalKey)) /* Success */
+	    {
+	    	entry->data = o;
+	    	statistics.insertOk++;
+	    	this->count++;
+	        return INSERT_DONE;
+	    }
+	    else if (oldKey == key)
+		{
+	    	entry->data = o;
+	    	statistics.insertDuplicate++;
+	        return INSERT_DUPLICATE;
+		}
+	    else
+	    {
+	    	statistics.insertHashCollision++;
+	    }
+	}
+
+	statistics.insertFailed++;
+	return INSERT_FAILED;
+}
+
+
+/**
+ * Hash the key, get an index in the hashtable, find the relevant entry,
+ * read the pointer, remove using atomic operation
+ * Only one context is allowed to remove a specific entry
+ */
+template<LocklessHashTableTemplateTypes>
+bool
+LocklessHashTable<LocklessHashTableTemplateArgs>::remove(Key key, Object *o)
+{
+    const uint_fast32_t hash = Hash::hash(key);
+	const uint_fast32_t index = getIndex(hash);
+	/* I can do this for the last slot too - I allocated max_tries more slots */
+	const uint_fast32_t indexMax = index+MAX_COLLISIONS;
+    statistics.removeTotal++;
+	for (TableEntry *entry = &table[index];entry < &table[indexMax];entry++)
+	{
+	    Key oldKey = entry->key;
+	    if (hashtable_unlikely(oldKey == key))
+	    {
+	        if (o)
+	        {
+	            *o = entry->data;
+	        }
+	        hashtable_sync_access(&entry->data) = IllegalData;
+	        hashtable_barrier();
+	        hashtable_sync_access(&entry->key) = IllegalKey;
+	    	this->count--;
+	        return true;
+	    }
+	}
+
+    statistics.removeFailed++;
+	return false;
+}
+
+/**
+ * Hash the key, get an index in the hashtable, find the relevant entry,
+ * read the pointer
+ */
+template<LocklessHashTableTemplateTypes>
+bool
+LocklessHashTable<LocklessHashTableTemplateArgs>::search(Key key, Object *o)
+{
+    const uint_fast32_t hash = Hash::hash(key);
+	const uint_fast32_t index = getIndex(hash);
+	/* I can do this for the last slot too - I allocated max_tries more slots */
+	const uint_fast32_t indexMax = index+MAX_COLLISIONS;
+    statistics.searchTotal++;
+	for (TableEntry *entry = &table[index];entry < &table[indexMax];entry++)
+	{
+	    Key oldKey = entry->key;
+	    if (hashtable_likely(oldKey == key))
+	    {
+	        if (o)
+	        {
+	            *o = entry->data;
+	        }
+	        statistics.searchOk++;
+	        return true;
+	    }
+	}
+
+    statistics.searchFailed++;
+	return false;
+}
