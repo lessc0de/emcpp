@@ -1170,3 +1170,41 @@ int main(char *argc, int argv) (
 )
 
 Tip: argumenst of main(), brackets, print()
+
+
+Find integer which occurs odd number of times on the list 
+
+# 1 1 2 3 3 4 4 
+
+
+
+def collect(list_numbers):
+    hash_table = {}
+    for number in  list_numbers:
+        if number in hash_table:
+            if (hash_table[number] == 0):
+                hash_table[number] = hash_table[number] + 1 # TBD can be XOR
+             else:
+                hash_table[number] = hash_table[number] - 1 
+              
+        else:
+            hash_table[number] = 0
+            
+      return hash_table
+      
+      
+
+def lookup(hash_table):
+    list_of_odd_nuymbers = []
+    for key, value in hash_table:
+        if (value > 0):
+            list_of_odd_numbers.append(number)
+            break
+            
+     return list_of_odd_numbers
+            
+hash_table = collect([1,1,2,3,3,4])
+list_of_odd_numbers = lookup(hashtable)
+
+
+
