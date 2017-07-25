@@ -819,11 +819,11 @@ typedef Lock<SynchroObjectDummy> LockDummy;
  * Performance: a core can make above 30M add&remove operations per second, cost of a
  * single operation is under 20 nanos which is an equivalent of 50-100 opcodes.
  */
-#define LocklessHashTableTemplateTypes typename Object, Object IllegalData, typename Key, Key IllegalKey, typename Allocator, typename Hash
-#define LocklessHashTableTemplateArgs Object, IllegalData, Key, IllegalKey, Allocator, Hash
+#define LockfreeHashTableTemplateTypes typename Object, Object IllegalData, typename Key, Key IllegalKey, typename Allocator, typename Hash
+#define LockfreeHashTableTemplateArgs Object, IllegalData, Key, IllegalKey, Allocator, Hash
 
-template<LocklessHashTableTemplateTypes>
-class LocklessHashTable: public HashTableBase
+template<LockfreeHashTableTemplateTypes>
+class LockfreeHashTable: public HashTableBase
 {
 public:
     enum InsertResult
@@ -834,7 +834,7 @@ public:
         INSERT_FAILED
     };
 
-    static LocklessHashTable* create(const char *name, int sizeBits)
+    static LockfreeHashTable* create(const char *name, int sizeBits)
     {
         size_t sizeEntries = (1 << sizeBits);
         size_t sizeBytes = memorySize(sizeBits);
@@ -848,13 +848,13 @@ public:
             initSlot(&table[i]);
         }
 
-        void *locklessHashTableMemory = Allocator::alloc(sizeof(LocklessHashTable));
+        void *locklessHashTableMemory = Allocator::alloc(sizeof(LockfreeHashTable));
         if (locklessHashTableMemory == nullptr)
         {
             Allocator::free((void *)table);
             return nullptr;
         }
-        LocklessHashTable *locklessHashTable = new (locklessHashTableMemory) LocklessHashTable(name, sizeBits, table);
+        LockfreeHashTable *locklessHashTable = new (locklessHashTableMemory) LockfreeHashTable(name, sizeBits, table);
         return locklessHashTable;
     }
 
@@ -862,14 +862,14 @@ public:
      * Because the hash table is created using a placement operator new[]
      * I need function destroy which takes care of the cleanup
      */
-    static void destroy(LocklessHashTable *hashTable)
+    static void destroy(LockfreeHashTable *hashTable)
     {
-        hashTable->~LocklessHashTable();
+        hashTable->~LockfreeHashTable();
         Allocator::free(hashTable->table);
         Allocator::free((void *)hashTable);
     }
 
-    ~LocklessHashTable()
+    ~LockfreeHashTable()
     {
     }
 
@@ -899,7 +899,7 @@ protected:
         return (sizeof(TableEntry) * entries);
     }
 
-    LocklessHashTable(const char *name, int sizeBits, TableEntry* table) : HashTableBase(name)
+    LockfreeHashTable(const char *name, int sizeBits, TableEntry* table) : HashTableBase(name)
 	{
         sizeEntries = (1 << sizeBits);
         sizeBytes = memorySize(sizeBits);
@@ -923,9 +923,9 @@ protected:
  * If fails (not likely) try again with the next slot (linear probing)
  * continue until success or max_tries is hit
  */
-template<LocklessHashTableTemplateTypes>
-enum LocklessHashTable<LocklessHashTableTemplateArgs>::InsertResult
-LocklessHashTable<LocklessHashTableTemplateArgs>::insert(Key key, const Object &o)
+template<LockfreeHashTableTemplateTypes>
+enum LockfreeHashTable<LockfreeHashTableTemplateArgs>::InsertResult
+LockfreeHashTable<LockfreeHashTableTemplateArgs>::insert(Key key, const Object &o)
 {
     const uint_fast32_t hash = Hash::hash(key);
 	const uint_fast32_t index = getIndex(hash);
@@ -964,9 +964,9 @@ LocklessHashTable<LocklessHashTableTemplateArgs>::insert(Key key, const Object &
  * read the pointer, remove using atomic operation
  * Only one context is allowed to remove a specific entry
  */
-template<LocklessHashTableTemplateTypes>
+template<LockfreeHashTableTemplateTypes>
 bool
-LocklessHashTable<LocklessHashTableTemplateArgs>::remove(Key key, Object *o)
+LockfreeHashTable<LockfreeHashTableTemplateArgs>::remove(Key key, Object *o)
 {
     const uint_fast32_t hash = Hash::hash(key);
 	const uint_fast32_t index = getIndex(hash);
@@ -998,9 +998,9 @@ LocklessHashTable<LocklessHashTableTemplateArgs>::remove(Key key, Object *o)
  * Hash the key, get an index in the hashtable, find the relevant entry,
  * read the pointer
  */
-template<LocklessHashTableTemplateTypes>
+template<LockfreeHashTableTemplateTypes>
 bool
-LocklessHashTable<LocklessHashTableTemplateArgs>::search(Key key, Object *o)
+LockfreeHashTable<LockfreeHashTableTemplateArgs>::search(Key key, Object *o)
 {
     const uint_fast32_t hash = Hash::hash(key);
 	const uint_fast32_t index = getIndex(hash);
@@ -1024,3 +1024,11 @@ LocklessHashTable<LocklessHashTableTemplateArgs>::search(Key key, Object *o)
     statistics.searchFailed++;
 	return false;
 }
+
+struct HashTrivial
+{
+    static const uint_fast32_t hash(uint32_t key)
+    {
+        return key;
+    }
+};

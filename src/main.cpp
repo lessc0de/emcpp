@@ -1209,16 +1209,8 @@ static void hashTableTest(void)
     MyHashTable::destroy(hashTable2);
 }
 
-struct SimpleHash
-{
 
-    static const uint_fast32_t hash(uint32_t key)
-    {
-        return key;
-    }
-};
-
-typedef LocklessHashTable<uint32_t, (uint32_t)-1, uint32_t, (uint32_t)-1, AllocatorTrivial, SimpleHash> MyLocklessHashTable;
+typedef LockfreeHashTable<uint32_t, (uint32_t)-1, uint32_t, (uint32_t)-1, AllocatorTrivial, HashTrivial> MyLockfreeHashTable;
 
 #define HASHTABLE_BITS 8
 
@@ -1239,15 +1231,15 @@ static inline uint32_t get_value(int idx)
 
 static int lockfreeHashTableTest(int cpus)
 {
-	MyLocklessHashTable *hashTable = MyLocklessHashTable::create("myHashTable", HASHTABLE_BITS);
+	MyLockfreeHashTable *hashTable = MyLockfreeHashTable::create("myHashTable", HASHTABLE_BITS);
     for (int i = 0;i < cpus;i++)
     {
         uint32_t value_to_store = get_value(i);
-        MyLocklessHashTable::InsertResult rc = hashTable->insert(value_to_store, value_to_store);
-        if (rc != MyLocklessHashTable::INSERT_DONE)
+        MyLockfreeHashTable::InsertResult rc = hashTable->insert(value_to_store, value_to_store);
+        if (rc != MyLockfreeHashTable::INSERT_DONE)
         {
         	cout << "Thread " << i << " failed to insert entry " << value_to_store << endl;
-        	MyLocklessHashTable::destroy(hashTable);
+        	MyLockfreeHashTable::destroy(hashTable);
             return 0;
         }
     }
@@ -1259,28 +1251,28 @@ static int lockfreeHashTableTest(int cpus)
         if (!rc)
         {
         	cout << "Thread " << i << " failed to remove entry " << value_to_store << endl;
-        	MyLocklessHashTable::destroy(hashTable);
+        	MyLockfreeHashTable::destroy(hashTable);
             return 0;
         }
         if (deleted_value != value_to_store)
         {
         	cout << "Thread " << i << " removed wrong entry " << value_to_store << " " << deleted_value << endl;
-        	MyLocklessHashTable::destroy(hashTable);
+        	MyLockfreeHashTable::destroy(hashTable);
             return 1;
         }
     }
     cout << "lockfreeHashTableTest is Ok" << endl;
-	MyLocklessHashTable::destroy(hashTable);
+	MyLockfreeHashTable::destroy(hashTable);
     return 1;
 }
 
 static int lockfreeHashTableSpeedTest(size_t loops)
 {
-	MyLocklessHashTable *hashTable = MyLocklessHashTable::create("myHashTable", HASHTABLE_BITS);
+	MyLockfreeHashTable *hashTable = MyLockfreeHashTable::create("myHashTable", HASHTABLE_BITS);
     for (size_t i = 0;i < loops;i++)
     {
-        MyLocklessHashTable::InsertResult rc = hashTable->insert(1, 1);
-        if (rc != MyLocklessHashTable::INSERT_DONE)
+        MyLockfreeHashTable::InsertResult rc = hashTable->insert(1, 1);
+        if (rc != MyLockfreeHashTable::INSERT_DONE)
         {
         	cout << "Thread " << i << " failed to insert entry " << endl;
         	break;
@@ -1292,7 +1284,7 @@ static int lockfreeHashTableSpeedTest(size_t loops)
         	break;
         }
     }
-	MyLocklessHashTable::destroy(hashTable);
+	MyLockfreeHashTable::destroy(hashTable);
 }
 #endif  // EXAMPLE == 10
 
