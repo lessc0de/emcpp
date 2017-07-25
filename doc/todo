@@ -1208,10 +1208,11 @@ list_of_odd_numbers = lookup(hashtable)
 
 
 def collect(list_numbers):
-    odd_number = 0 # start from zero and xor all numbers
-    for number in  list_numbers:
+    odd_number = list_numbers[0] # start from zero and xor all numbers
+    for number in  list_numbers[1:]:
         odd_number = odd_number ^ number;
     return odd_number
 
-print  collect([1,1,2,3,3,4])
+print  collect([1,1,2,2,0,3,3,4,4])
+
 
