@@ -1216,3 +1216,31 @@ def collect(list_numbers):
 print  collect([1,1,2,2,0,3,3,4,4])
 
 
+
+How function strcpy() can be made faster
+
+Given an array of character find first occurence of any of the charactes in a string
+
+
+What is the output of the following program?
+using namespace std;
+char f1(char c) {
+ return c == 'z' ? 'a' : c + 1;
+}
+char f2(char &c) {
+ c = f1(c);
+ return c;
+}
+int main(void) {
+ char x = 'x';
+ cout << f2(x);
+ cout << f2(x);
+ cout << f2(x) << endl;
+ return 0;
+}
+
+1. XYZ
+2. yza  <---
+3. xyz
+4. YZA
+

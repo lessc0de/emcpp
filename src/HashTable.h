@@ -449,24 +449,28 @@ HashTable<Object, Key, Lock, Allocator, Hash, Comparator>::insert(const Key &key
         HashTable &hashTable)
 {
     InsertResult insertResult = INSERT_FAILED;
-    bool result = false;
 
+    // The hash table size is a variable and not a constant - another complication
+    // There is a modulus inside the method
     uint_fast32_t index = getIndex(key, size);
-    TableEntry *tableEntry = &table[index];
     Statistics *statistics = &hashTable.statistics;
+    TableEntry *tableEntry = &table[index];
 
     Lock lock;
     statistics->insertTotal++;
 
-    result = (*tableEntry == hashTable.illegalValue);
-    if (!result)
+    // The following code is driven by necessity to release the lock before return from the
+    // function. I want a single return point
+    bool result = (*tableEntry == hashTable.illegalValue);
+    if (!result)  // this is not a likely outcome
     {
         insertResult = INSERT_COLLISION;
-        for (int collisions = 1;collisions < MAX_COLLISIONS;collisions++)
+        tableEntry++;
+        const TableEntry *tableEntryLast = &table[index+MAX_COLLISIONS];
+        for (;tableEntry <= tableEntryLast;tableEntry++)
         {
             statistics->insertHashCollision++;
             hashTable.collisionsInTheTable++;
-            tableEntry++;                   // I can do this - table contains (size+MAX_COLLISIONS) entries
             if (*tableEntry == hashTable.illegalValue)
             {
                 result = true;
