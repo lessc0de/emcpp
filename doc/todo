@@ -1244,3 +1244,35 @@ int main(void) {
 3. xyz
 4. YZA
 
+The following code will print 6
+#include <iostream>
+namespace alpha {int var = 0;}
+namespace beta
+{
+        int var = alpha::var += 2;
+}
+
+
+int main()
+{
+        beta::var += alpha::var;
+        {
+                using namespace beta;
+                std::cout << alpha::var + var;
+        }
+}
+
+
+#include <iostream>
+
+int main()
+{
+        for (int i=0;i<3;i++)
+        for (int j=0;j<=3;j++)
+                std::cout << i;
+        return 0;
+}
+
+
+will ouput 000011112222
+
