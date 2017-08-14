@@ -1276,3 +1276,72 @@ int main()
 
 will ouput 000011112222
 
+
+
+#include <iostream>
+
+int main()
+{
+        for (int i=0;i<3;i++)
+        for (int j=0;j<=i;j++)
+                std::cout << i;
+        return 0;
+}
+
+
+will ouput 011222
+
+
+#include <iostream>
+
+
+int main()
+{
+        int N = 235;
+        int sum = 0;
+        while (N > 0)
+        {
+                sum = sum * 10 + N%10;
+                N /= 10;
+        }
+        std::cout << sum;
+}
+will ouput 532
+
+
+#include <iostream>
+
+template<class T> void f(T &t){ std::cout << 1;}
+template<> void f(const int &t){std::cout << 2;}
+
+int main()
+{
+        int i = 8;
+        f(i);
+}
+Will print 1
+
+
+#include <iostream>
+
+class A 
+{
+public:
+        A() {std::cout << 1;}
+        ~A() {std::cout << 2;}
+};
+
+class B: public A 
+{
+        public:
+        B() {std::cout << 3;} 
+        ~B() {std::cout << 4;}
+};
+
+int main() 
+{
+        A a;
+        B b;
+}
+
+Prints 113422
