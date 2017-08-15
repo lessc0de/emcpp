@@ -1345,3 +1345,26 @@ int main()
 }
 
 Prints 113422
+
+
+        std::string s = "Abc", t="A";
+        s =s  + t;
+        std::cout << s << std::endl;
+        t = t + s;
+        std::cout << t << std::endl;
+        int i = s.compare(t) > 0;
+        std::cout << s.compare(t);
+        int j = s.length() < t.length();
+        std::cout << i+j;
+prints 2
+
+
+int t[4] = {8, 4, 2, 1};
+int *p1 = t+2, *p2=p1-1;
+p1++; 
+std::cout << *p1 - t[p1-p2]; 
+
+prints -1
+
+
+
