@@ -1425,3 +1425,59 @@ Prints 11
 
 
 
+class A{
+public:
+    static int a;
+    A() {
+        ++a;
+    }
+};
+
+int A::a=1;
+
+void f(void){
+    A a;
+    throw string("");
+};
+
+int main() {
+    A a;
+    try {
+        f();
+    }
+    catch (string &s){
+        cout << A::a;
+    }
+	return 0;
+}
+
+Prints 3
+
+
+int *fun(void) {
+    return new int[2];
+}
+
+int fun(int *p) {
+    delete [] p;
+    return 0;
+}
+
+void fun(int *p, int q) {
+    p[q] *= 2;
+}
+
+void fun(int *p, int q, int r){
+    p[q] = r;
+}
+
+int main() {
+    int *v=fun();
+    fun(v,0,1);
+    fun(v,1,2);
+    fun(v,0);
+    cout << v[1]+v[0];
+    fun(v);
+    return 0;
+}
+Prints 4
