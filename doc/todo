@@ -1368,3 +1368,60 @@ prints -1
 
 
 
+#include <iostream>
+
+class A{
+public:
+        int a;
+};
+
+class B:public A{
+public:
+        int b;
+        int c;
+};
+
+int main() 
+{
+
+        A o1;
+        B o2;
+        o1.a = 1;
+        o2.b = 2;
+        o2.c = 3;
+        o2.a = 4;
+        o1 = o2;
+        std::cout << o1.a;
+} 
+Prints 4
+
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+int main() 
+{
+        int a[5] = {5,10,15,20,25};
+        int i, j, k =1, m;
+        i = ++a[1];
+        j = a[2]++;
+        m = a[k];
+        cout << i << j << m;
+} 
+
+Print 111511
+
+
+int i=2,j=3;
+for(i;i=10;i++){break;}
+cout << "i+j=" << i+j;
+Prints "i+j"=13
+
+int a=10;
+for (a=1;a <=10;a++);
+cout <<a;
+Prints 11
+
+
+
