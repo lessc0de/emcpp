@@ -1481,3 +1481,96 @@ int main() {
     return 0;
 }
 Prints 4
+
+
+// Example program
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class A
+{
+    public:
+    virtual void f(){cout << 1;}
+};
+class B :public A
+{
+    public:
+    void f(){cout << 2;}
+};
+class C :public B
+{
+    public:
+    void f(){cout << 3;}
+};
+
+int main()
+{
+    B *p=new C;
+    p->f();
+}
+Prints 3
+http://cpp.sh/65uc4
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+class A{
+    public:
+    A() {cout << "A(),";foo();}
+    virtual ~A() {cout<< "~A(),";foo();}
+    virtual void foo(){
+        cout<<"A::foo,";
+    }
+    void bar() {cout <<"A::bar(),";foo();}
+};
+class B:public A{
+    virtual void foo(){cout<<"B::foo(),";}
+};
+int main(){
+    B b;
+    b.bar();
+}
+Prints A(),A::foo,A::bar(),B::foo(),~A(),A::foo, 
+
+
+int main() {
+    int i,j;
+    int mat[3][3] = {
+        1,2,3,
+        4,5,6,
+        7,8,9
+    };
+    for(i=0;i<3;i++)
+    for(j=0;j<3;j++)
+        cout<<*(*(mat+j)+i);
+}
+147258369
+
+
+
+int x=0;
+class A{
+    public:
+    A(){
+        if (x++==0){
+            throw exception();
+        }
+        cout<<"a";
+    }
+    ~A(){cout<<"b";}
+};
+
+
+int main() {
+    try{
+        A a;
+    }
+    catch (exception e)
+    {  
+        cout<<"c";
+    }
+}
+Prints "c"
