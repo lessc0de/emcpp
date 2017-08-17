@@ -1678,3 +1678,11 @@ int main()
     return 0;
 }
 Prints 16941
+
+
+Fill blanks to swapp the values of x and y
+    int x=5;
+    int y=6;
+    x= ? + y;
+    y= x - y;
+    x= x ? y;
