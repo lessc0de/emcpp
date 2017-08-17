@@ -1665,3 +1665,16 @@ int main(){
     C c;
 }
 Prints 123456
+
+
+int main()
+{
+    int m1[2][2]={{1,2},{3,4}};
+    for (int i=1;i>-1;i--)
+    for (int j=1;j>-1;j--)
+        cout<<m1[i][j]*m1[i][j];
+        
+        
+    return 0;
+}
+Prints 16941
