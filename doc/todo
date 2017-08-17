@@ -1636,3 +1636,32 @@ int main(){
 }
 Prints 1,2,3,4
 
+
+class A{
+    public:
+    A(){
+        cout<<"1";
+    }
+    ~A(){cout<<"6";}
+};
+
+class B{
+    public:
+    B(){
+        cout<<"2";
+    }
+    ~B(){cout<<"5";}
+};
+
+class C:public A,public B{
+    public:
+    C(){
+        cout<<"3";
+    }
+    ~C(){cout<<"4";}
+};
+
+int main(){
+    C c;
+}
+Prints 123456
