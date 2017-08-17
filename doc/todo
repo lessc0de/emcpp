@@ -1608,3 +1608,31 @@ int main(){
     }
 }
 Prints 243
+
+
+class A{
+    public:
+    A(){
+        cout<<"1";
+    }
+    ~A(){
+        cout<<"4";
+    }
+};
+
+class B{
+    public:
+    B(){
+        cout<<"2";
+    }
+    ~B(){
+        cout<<"3";
+    }
+    A a;
+};
+
+int main(){
+    B b;
+}
+Prints 1,2,3,4
+
