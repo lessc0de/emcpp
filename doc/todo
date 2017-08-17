@@ -1592,3 +1592,19 @@ int main(){
 Prints 12:5
 
 
+class Sample{
+    public:
+    Sample(){cout<<2;}
+    ~Sample(){cout<<4;}
+};
+
+int main(){
+    try{
+        Sample obj;
+        throw 10;
+    }
+    catch (int n){
+        cout<<3;
+    }
+}
+Prints 243
