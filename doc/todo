@@ -61,6 +61,40 @@ void print(node *root)
 
 You have a storage (a hard disk) and two or more servers which can access the storage concurrently. A block write/read is an atomic operation. 
 How mutex can be implemented? Tip: https://en.wikipedia.org/wiki/Peterson%27s_algorithm
+https://en.wikipedia.org/wiki/Lamport%27s_bakery_algorithm
+
+Implement lock/unlock for N threads, two atomic memory locations. You can assume there is a special managemt thread.
+
+tid is threadId
+
+int S1, S2;
+
+Lock(tid)
+{
+	while (true)
+	{
+		while (S1 != 0);
+		S1 = tid;
+		while (S2 == 0);
+		if (S2 == tid) break;
+	}
+}
+
+management()
+{
+	while (true)
+	{
+		while (S1 == 0);
+		S2 = S1;
+		while (S2 != 0);
+		S1 = 0;
+	}
+}
+
+Unlock(id)
+{
+	S2 = 0;
+}
 
 // Implement following class
 class Bandwidth
@@ -1686,3 +1720,13 @@ Fill blanks to swapp the values of x and y
     x= ? + y;
     y= x - y;
     x= x ? y;
+
+
+There is an array of numbers. Find maximum consequtive range in the array. 
+For example in array [0, 1, 2, 1] the maxim range is 2 - between 0 and 2
+
+
+Implement two console applications A and B, where A gets a list of numbers, sends the list to B, B orders the list,
+B sends the ordered list to A, A prints the ordered list
+Assume C++11 and Unix or Linuxy
+
