@@ -1745,3 +1745,12 @@ Version 1: binary search.
 Version 2: find an interval containing T of size ≤2T, then do binary search.
 Version 3: find an interval of size N−−√, then do sequential search. Note: can be improved to ∼2N−−−√ tosses.
 Version 4: 1+2+3+…+t∼12t2. Aim for c=22√.
+
+
+Version 0 : try from floor 1 until it's broken
+Version 1: binary search
+Version 2 : try from 1 , 2, 4, ... the first number that is bigger than T , totally ~lgT tosses , then do binary search another ~lgT tosses
+Version 3 :  try from n^0.5 , 2*n^0.5 , 3*n^0.5 , ... the first number that is bigger than T, used 1 egg and at most ~n^0.5 tosses. then we know T is between k*n^0.5 and (k+1)*n^0.5  , then we try from lower bound to upper bound , at most n^0.5 tosses and use another egg
+Version 4: try from 1, 1+2 , 1+2+3 , ..., 1+2+3 + ... +k the first number that is bigger than T, used 1 egg and  k tosses , then try in last k floor, so totally 2k tosses, 0.5 *k * (k + 1) = T , so k = 2^0.5 T^0.5 
+
+
