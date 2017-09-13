@@ -71,12 +71,9 @@ int S1, S2;
 
 Lock(tid)
 {
-	while (true)
+	while (S2 != tid)
 	{
-		while (S1 != 0);
 		S1 = tid;
-		while (S2 == 0);
-		if (S2 == tid) break;
 	}
 }
 
@@ -84,10 +81,11 @@ management()
 {
 	while (true)
 	{
-		while (S1 == 0);
-		S2 = S1;
-		while (S2 != 0);
-		S1 = 0;
+		if ((S2 == 0) && (S1 != 0))
+		{
+			S2 = S1;
+			S1 = 0;
+		}
 	}
 }
 
@@ -1728,5 +1726,5 @@ For example in array [0, 1, 2, 1] the maxim range is 2 - between 0 and 2
 
 Implement two console applications A and B, where A gets a list of numbers, sends the list to B, B orders the list,
 B sends the ordered list to A, A prints the ordered list
-Assume C++11 and Unix or Linuxy
+Assume C++11 and Unix or Linux
 
