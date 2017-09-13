@@ -69,7 +69,7 @@ tid is threadId
 
 int S1, S2;
 
-Lock(tid)
+void Lock(int tid)
 {
 	while (S2 != tid)
 	{
@@ -77,7 +77,7 @@ Lock(tid)
 	}
 }
 
-management()
+void management()
 {
 	while (true)
 	{
@@ -89,9 +89,10 @@ management()
 	}
 }
 
-Unlock(id)
+void Unlock(int tid)
 {
-	S2 = 0;
+	if (tid == S2)
+		S2 = 0;
 }
 
 // Implement following class
