@@ -1753,4 +1753,18 @@ Version 2 : try from 1 , 2, 4, ... the first number that is bigger than T , tota
 Version 3 :  try from n^0.5 , 2*n^0.5 , 3*n^0.5 , ... the first number that is bigger than T, used 1 egg and at most ~n^0.5 tosses. then we know T is between k*n^0.5 and (k+1)*n^0.5  , then we try from lower bound to upper bound , at most n^0.5 tosses and use another egg
 Version 4: try from 1, 1+2 , 1+2+3 , ..., 1+2+3 + ... +k the first number that is bigger than T, used 1 egg and  k tosses , then try in last k floor, so totally 2k tosses, 0.5 *k * (k + 1) = T , so k = 2^0.5 T^0.5 
 
+If two threads are incrementing a variable 100 times each without synchronization, what would be the possible min and maximum value.
+Between 2 and 200 - the minimum value does not depend on the number of threads the maximum is 100 x number of threads
+https://www.careercup.com/question?id=18315663
+https://stackoverflow.com/questions/16056462/minimum-and-maximum-value-of-a-global-variable-with-2-thread
+https://stackoverflow.com/questions/4236209/minimum-and-maximum-possible-value-of-a-shared-variable-when-incremented-by-mult
+For 5 threads: name the 5 threads A, B, C, D and E.
+A loads 0
+C, D, E run to completion
+B runs through 4 of its 5 iterations.
+A increments 0 to 1 and stores the result (1).
+B loads 1
+A runs to completion
+B increments 1 to 2 and stores 2.
+
 
