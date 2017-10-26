@@ -1771,4 +1771,33 @@ B loads 1
 A runs to completion
 B increments 1 to 2 and stores 2.
 
+We have 512CPUs and 1M I/O ports. Every CPU can access any port. A CPU can access only one port any given moment
+CPUs call functions start_access(int port) and stop_access(int port) before and after access to an I/O port.
+Implement function int is_port_accessed(int port) which returns True if the port is access by a CPU
+Ignore race conditions
+
+Add to the system nn array Ports[1000*1000] one byte each and one global variable.
+static char Ports[1000*1000];
+static const int ILLEGAL = -1;
+static int PortWrap = ILLEGAL;
+void start_access(int port)
+{
+	int val = Ports[port]++;
+	if (!val)  // wrap around happened - can happen only for one port
+		PortWrap = port;
+}
+
+void end_access(port)
+{
+	int val = Ports[port];
+	Ports[port]--;
+	if (!val)    // the original value is zero, there is a wrap around in this port      
+		PortWrap = ILLEGAL;
+}
+
+int is_accessed(int port)
+{
+	return (PortWrap == port) || Ports[port];
+}
+
 
