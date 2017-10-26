@@ -1800,4 +1800,6 @@ int is_accessed(int port)
 	return (PortWrap == port) || Ports[port];
 }
 
-
+Mimimum space add array CPUS[512], set port number in the array in the start_access,
+reset entry in the end_access(). Function is_accessed() shall check all CPUS if any 
+of the CPUS accessing the specified port.
