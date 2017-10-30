@@ -1803,3 +1803,48 @@ int is_accessed(int port)
 Mimimum space add array CPUS[512], set port number in the array in the start_access,
 reset entry in the end_access(). Function is_accessed() shall check all CPUS if any 
 of the CPUS accessing the specified port.
+
+
+
+Write a function which replaces a null terminated sequence of chars by a single char. For example,
+given a sequence "aabcc" it will write "abc"
+void foo(char *s)
+{
+	char prev = 0;
+	char last;
+	char *pos = s;
+	while (last = *s)
+	{
+		if (prev !- last)
+		{
+			prev = last;
+			*pos = last;
+			pos++;
+		}
+		s++;
+	}
+	*pos = 0;
+}
+
+
+How to implement two functions:
+void in_use(int value);
+int get_least_recent_unit();
+Complexity is O(1)
+Assume numbers 0-N, where N fits in RAM
+
+For example, for the squence 1,2,3 return 1
+for the sequence 1,2,3,1 return 2
+1,2,3,1,3  return 2
+1,2,3,1,3,2 return 1
+
+Add linked lits of incoming numbers. Index table where for every numbe in the range 0-N I keep a reference to the node in the list
+WHen a number arrives I get the node from the index table. I swap the node with the last node. If the node is not in the list add the new node to 
+the end of the list
+LRU - the oldest entry - will always in the first node of the list
+
+
+There is a file on the disk with up to 10^7 different numbers. Sort the numbers in O(n) if you have 2MB of RAM
+Allocate 10^7 bits. Read the numbers. For every number set the corresponding bit. Read the collected data, write the numbers in order.
+10^7 ~ 2^21, 2MB RAM ~ 2^21
+
