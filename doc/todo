@@ -1848,3 +1848,75 @@ There is a file on the disk with up to 10^7 different numbers. Sort the numbers 
 Allocate 10^7 bits. Read the numbers. For every number set the corresponding bit. Read the collected data, write the numbers in order.
 10^7 ~ 2^21, 2MB RAM ~ 2^21
 
+
+int main()
+{
+    char *p;
+    printf("%d %d ", sizeof(*p), sizeof(p));
+}
+
+
+What the following code will output?
+Where the variables are stored?
+int main()
+{
+    char *p1 = "String";
+    char *p2;
+    p2 = p1;
+    p1 = "Test";
+    printf("%s %s\n", p1, p2);
+    return 0;
+}
+
+
+What the following code will output
+
+int main()
+{
+    char c=48;
+    int i, mask=01;
+    for(i=1; i<=5; i++)
+    {
+        printf("%c", c|mask);
+        mask = mask<<1;
+    }
+    return 0;
+}
+
+Answer 12480 
+
+
+
+What is the output of the following code
+class B
+{
+public:
+    virtual int shift(int n = 2) const { return n << 2; }
+};
+
+class D
+    : public B
+{
+public:
+    int shift(int n = 3) const { return n << 3; }
+};
+
+int main()
+{
+    const D d;
+    const B *b = &d;
+
+    std::cout << b->shift() << std::endl;
+
+    return 0;
+}
+
+Answer 16 
+Explanation: virtual function shift() in the class D will be called with default argumen 2
+
+
+ 
+The smallest possible way to store a position on the board of chess.
+One possible answer is to keep only occupied slots 3 bits for row, 3 bits for column, 3 bits, 32 pieces x 4 bits type.
+It can be improved, by keeping separate arrays for checks, bishops, kings, queens. I will give 6 bits for column and row, 32 bits in 12 separate  bit arrays    
+
