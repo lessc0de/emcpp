@@ -1920,3 +1920,5 @@ The smallest possible way to store a position on the board of chess.
 One possible answer is to keep only occupied slots 3 bits for row, 3 bits for column, 3 bits, 32 pieces x 4 bits type.
 It can be improved, by keeping separate arrays for checks, bishops, kings, queens. I will give 6 bits for column and row, 32 bits in 12 separate  bit arrays    
 
+
+More jokes https://www.schneierfacts.com/
