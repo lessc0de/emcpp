@@ -1925,5 +1925,5 @@ More jokes https://www.schneierfacts.com/
 
 
 how does a debugger watch point works (e.g., catch when a variable gets a value or gets updated)
-
+Hint - harwdare breakpoints on the write access to a memory location
 
