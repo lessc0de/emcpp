@@ -1963,3 +1963,8 @@ From https://isocpp.org/wiki/faq/proper-inheritance#derivedptrptr-to-baseptrptr
       carPtr->openGasCap();  // This might call fireNuclearMissile()!
       // ...
     }
+
+
+http://blog.gainlo.co/index.php/2017/02/02/uber-interview-questions-longest-increasing-subarray/
+https://www.quora.com/What-is-the-hardest-programming-interview-question-that-you-have-been-asked
+
