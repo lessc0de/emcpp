@@ -1972,3 +1972,5 @@ https://www.quora.com/What-is-the-hardest-programming-interview-question-that-yo
 
 name a couple of reasons that (a==1&&a==2&&a==3) evaluates to true.
 
+
+Which one is faster between if (n / 10 == 0) and if (n >= 0 && n<=9) in C++
