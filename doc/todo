@@ -1974,3 +1974,41 @@ name a couple of reasons that (a==1&&a==2&&a==3) evaluates to true.
 
 
 Which one is faster between if (n / 10 == 0) and if (n >= 0 && n<=9) in C++
+
+
+This is a bug 
+    decltype(auto) get()
+    {
+            std::string a="hello world";
+            return (a); // !!!!! BUG
+    }
+    int main()
+    {
+            std::cout << get() << "\n";
+    }
+and this is not
+    decltype(auto) get()
+    {
+            std::string a="hello world";
+            return a;
+    }
+    int main()
+    {
+            std::cout << get() << "\n";
+    }
+
+
+
+Reference outlives the object
+    std::string get()
+    {
+        return "hello world";
+    }
+    int main()
+    {
+      std::string_view view(get());
+      // Refers to junk, but no crash
+      std::cout << view << "\n";
+    }
+
+
