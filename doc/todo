@@ -19,6 +19,53 @@ http://puddleofriddles.blogspot.co.il/2011/07/basketball-riddle.html
 http://yosefk.com/c++fqa/  Why not C++
 
 
+
+    Being really good at C++ is like being really good at using rocks to sharpen sticks. – Thant Tessman
+    Arguing that Java is better than C++ is like arguing that grasshoppers taste better than tree bark. – Thant Tessman
+    There are only two things wrong with C++: The initial concept and the implementation. – Bertrand Meyer
+    C++ has its place in the history of programming languages. Just as Caligula has his place in the history of the Roman Empire. – Robert Firth
+    C++ is history repeated as tragedy. Java is history repeated as farce. – Scott McKay
+    C++ is like jamming a helicopter inside a Miata and expecting some sort of improvement. – Drew Olbrich
+    C++ is the only current language making COBOL look good. – Bertrand Meyer
+    C makes it easy to shoot yourself in the foot; C++ makes it harder, but when you do, it blows away your whole leg. – Bjarne Stroustrup
+    C++: Simula in wolf’s clothing. – Bjarne Stroustrup
+    C++ will do for C what Algol-68 did for Algol. – David L Jones
+    Historically, languages designed for other people to use have been bad: Cobol, PL/I, Pascal, Ada, C++. The good languages have been those that were designed for their own creators: C, Perl, Smalltalk, Lisp. – Paul Graham
+    I consider C++ the most significant technical hazard to the survival of your project and do so without apologies. – Alistair Cockburn
+    If C++ has taught me one thing, it’s this: Just because the system is consistent doesn’t mean it’s not the work of Satan. – Andrew Plotkin
+    If you think C++ is not overly complicated, just what is a protected abstract virtual base pure virtual private destructor and when was the last time you needed one? – Tom Cargill
+    I invented the term Object-Oriented, and I can tell you I did not have C++ in mind. – Alan Kay
+    It has been discovered that C++ provides a remarkable facility for concealing the trival details of a program – such as where its bugs are. – David Keppel
+    Java is, in many ways, C++–. – Michael Feldman
+    Java, the best argument for Smalltalk since C++. – Frank Winkler
+    PL/I and Ada started out with all the bloat, were very daunting languages, and got bad reputations (deservedly). C++ has shown that if you slowly bloat up a language over a period of years, people don’t seem to mind as much. – James Hague
+    The last good thing written in C++ was the Pachelbel Canon. – Jerry Olson
+    To me C++ seems to be a language that has sacrificed orthogonality and elegance for random expediency. – Meilir Page-Jones
+    Whenever the C++ language designers had two competing ideas as to how they should solve some problem, they said, “OK, we’ll do them both”. So the language is too baroque for my taste. – Donald E Knuth
+    Within C++, there is a much smaller and cleaner language struggling to get out. – Bjarne Stroustrup
+    {Major-Willard} C++ damages the brain … – EWD
+    C++ is the best example of second-system effect since OS/360. – Henry Spencer
+    C++ is an insult to the human brain – Niklaus Wirth
+    All new features added to C++ are intended to fix previously new features added to C++ – David Jameson
+    C++: glacial compiles, insane complexity, impenetrable errors, laughable cross-platform compat, basically useless tools. – Aaron Boodman
+    Life is too long to know C++ well. – Erik Naggum
+    If you like C++, you don’t know C++. There’s a mutual exclusion going on here, and I’ve yet to see a counter-example other than possibly a few of the members of the standards committee. – ssylvan in reddit.
+    *Oh, definitely. C++ may not be the worst programming language ever created, but without a doubt it’s the worst ever to be taken seriously. – Mason Wheeler
+    C++ is to C as Lung Cancer is to Lung.
+    I think maybe the guy who invented C++ doesn’t know the difference between increment and excrement. – smcameron
+    C++ is more of a rube-goldberg type thing full of high-voltages, large chain-driven gears, sharp edges, exploding widgets, and spots to get your fingers crushed. And because of it’s complexity many (if not most) of it’s users don’t know how it works, and can’t tell ahead of time what’s going to cause them to loose an arm. – Grant Edwards
+    C++: an octopus made by nailing extra legs onto a dog. – Steve Taylor
+    I believe C++ instills fear in programmers, fear that the interaction of some details causes unpredictable results. Its unmanageable complexity has spawned more fear-preventing tools than any other language, but the solution should have been to create and use a language that does not overload the whole goddamn human. – Erik Naggum
+    I may be biased, but I tend to find a much lower tendency among female programmers to be dishonest about their skills, and thus do not say they know C++ when they are smart enough to realize that that would be a lie for all but perhaps 5 people on this planet. – Erik Naggum
+    C++ is a language strongly optimized for liars and people who go by guesswork and ignorance. – Erik Naggum
+    c++ is a pile of crap. – Theo de Raadt
+    With C++, it’s possible to make code that isn’t understandable by anyone, with C, this is very hard. – Mike Abrash
+    Whenever I solve a difficult problem with C++, I feel like I’ve won a bar fight. – Michael Fogus
+    C is C++ without the BS. – SocialPhatology
+    [keeping somebody] from using C++ makes me feel like I saved a life – aiju
+    C++ is probably the only language where the error [message] can be longer than the program – aiju
+
+
 A set of questions https://www.quora.com/What-are-some-arcane-C-syntaxes-or-features-that-many-programmers-are-not-familiar-with
 
 Embedded http://kvasir.io/  and meta-programming https://github.com/edouarda/brigand  another presentation https://www.youtube.com/watch?v=AKAYc9ZFBhk
