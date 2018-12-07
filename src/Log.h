@@ -92,7 +92,9 @@ public:
     BinaryLog(int count, ...);
 };
 
-
+// the way to output anything which is not an integral type is
+// to send size of the argument first, followed by the argument
+// itself, mark such complex argument as such
 BinaryLog::BinaryLog(int fileId, int line, int count, ...) {
     const int HEADER_SIZE = 3;
     int header[HEADER_SIZE];
