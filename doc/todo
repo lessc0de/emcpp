@@ -2078,3 +2078,22 @@ Reference outlives the object
     }
 
 
+
+
+
+    #include <stdio.h>
+     
+    struct mystruct {
+    	int enabled:1;// Tip: signed integer
+    };
+     
+    int main()
+    {
+    	struct mystruct s;
+    	s.enabled = 1;
+    	if (s.enabled == 1) {
+    		printf("Is enabled\n");
+    	} else {
+    		printf("Is disabled\n"); // This is the output 
+    	}
+    }
