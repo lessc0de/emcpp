@@ -21,6 +21,8 @@ http://yosefk.com/c++fqa/  Why not C++
 A large FQA https://yosefk.com/c++fqa/
 https://www.youtube.com/watch?v=KAWA1DuvCnQ
 
+C built in functions http://www.delorie.com/gnu/docs/gcc/gcc_81.html  
+Things like __builtin_constant_p
 
 https://www.tutorialspoint.com/computer_graphics/circle_generation_algorithm.htm
 https://cs.chromium.org/chromium/src/chrome/browser/ui/cocoa/tabs/tab_strip_controller.mm?l=1099
