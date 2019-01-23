@@ -2101,3 +2101,67 @@ Reference outlives the object
     		printf("Is disabled\n"); // This is the output 
     	}
     }
+
+
+https://qr.ae/TUn6yD
+
+Consider a “cartesian” graph with t columns and p rows of vertexes. There exists a directed edge from vi,j to vi+1,j+1, vi,j+1, and vi−1,j+1. Handle the edge conditions however you like. The weight of each edge is drawn from some random distribution. What is the expected value of the critical path, given a particular distribution and some arbitrary p and t
+
+?
+
+(The question has to do with message-passing parallel applications, where t
+is the number of simulation timesteps and p is the number of “processors”. The problem represents a one-dimensional halo exchange. Two- and three-dimensional exchanges are the norm.)
+
+My very rough intuition on the second question is that the length of the critical path pretty quickly tends towards the worst possible length as t and p
+
+grow.
+
+Consider a much simplified problem: I send out 1000 RPCs to 1000 parallel servers, and they send back 1000 parallel replies. I’m done when I receive all 1000 parallel replies.
+
+The performance of this simple example is dominated by the 99.9 percentile tail latency for the RPC. The rest of the shape of the distribution doesn’t matter. Just the weight at a particular percentile and the degree of in-cast.
+
+The halo network you describe has an in-cast of 3. So, whatever the 66.7 percentile weight in your distribution is tells me the expected latency for each node in v1,j
+(assuming the we started at v0,j
+
+).
+
+I think you can then apply this iteratively to each subsequent rank in the trellis, ultimately converging on a 66.7 percentile of the weight distribution times the number of ranks.
+
+This is all off the top of my head, and I probably made too many logical leaps.
+
+—-
+
+Edit:
+
+At the bottom, though, which of the outputs is the output on the critical path? You’ve got p
+
+outputs. You need to apply the in-cast reasoning I applied in the second paragraph to all of these, and that’s where things blow up.
+
+Let’s say p=1000
+
+: Now you need to consider the 99.9 percentile of the outputs.
+
+I don’t think you can skate on 66.7 percentile time multiplied by t
+
+, as that’s just an expected value. You need the cumulative distribution so you can apply the in-cast reasoning to all the nodes in the final rank.
+
+Yuck.
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+
